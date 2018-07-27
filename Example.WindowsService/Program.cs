@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
+using Example.Application;
+using Ninject;
 
 namespace Example.WindowsService
 {
@@ -12,14 +10,33 @@ namespace Example.WindowsService
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        static void Main()
+        static void Main(string[] args)
         {
-            ServiceBase[] ServicesToRun;
-            ServicesToRun = new ServiceBase[]
+            IKernel kernel = new StandardKernel(new SomeServiceModule());
+            var someApplication = kernel.Get<ISomeApplication>();
+
+            try
             {
-                new Service1()
-            };
-            ServiceBase.Run(ServicesToRun);
+                var mailerService = new SomeService(someApplication);
+                if (Environment.UserInteractive)
+                {
+                    mailerService.StartConsole(args);
+                    Console.Read();
+                    mailerService.StopConsole();
+                }
+                else
+                {
+                    ServiceBase.Run(mailerService);
+                }
+            }
+            catch (Exception exception)
+            {
+                if (Environment.UserInteractive)
+                {
+                    Console.WriteLine(exception);
+                    Console.Read();
+                }
+            }
         }
     }
 }
