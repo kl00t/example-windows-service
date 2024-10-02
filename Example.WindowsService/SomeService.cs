@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Example.Application;
+using System;
 using System.ServiceProcess;
 using System.Timers;
-using Example.Application;
 
 namespace Example.WindowsService
 {

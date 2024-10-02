@@ -17,16 +17,16 @@ namespace Example.WindowsService
 
             try
             {
-                var mailerService = new SomeService(someApplication);
+                var someService = new SomeService(someApplication);
                 if (Environment.UserInteractive)
                 {
-                    mailerService.StartConsole(args);
+                    someService.StartConsole(args);
                     Console.Read();
-                    mailerService.StopConsole();
+                    someService.StopConsole();
                 }
                 else
                 {
-                    ServiceBase.Run(mailerService);
+                    ServiceBase.Run(someService);
                 }
             }
             catch (Exception exception)
